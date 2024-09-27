@@ -12,11 +12,11 @@ function setup() {
     wWidth = windowWidth;
     wHeight = windowHeight;
     zoom = createSlider(Math.max(wWidth/bg.width, wHeight/bg.height),Math.max(wWidth/bg.width, wHeight/bg.height)*10,0,0);
-    zoom.position(0,windowHeight/2);
+    // zoom.position(0,windowHeight/2);
     zoom.style('transform','rotate(270deg)');
-    zoom.style('height','30vh');
-    zoom.style('right','10px');
-    zoom.style('left','auto');
+    zoom.style('width','30vh');
+    zoom.style('right','calc(-15vh + 50px)');
+    zoom.style('top','50vh');
     zoom.style('position','fixed');
     // currentpos = {x: bg.width/2-miku.width/2+10, y: 0};
 }
