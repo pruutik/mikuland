@@ -43,6 +43,17 @@ function randomNum(min, max) { // min and max included
     return Math.random() * (max - min + 1) + min;
 }
 
+let anchor = {x:0,y:0};
+let offset = {x:0,y:0};
+function mousePressed() {
+    anchor.x = mouseX - offset.x;
+    anchor.y = mouseY - offset.y;
+}
+function mouseDragged() {
+    offset.x = mouseX - anchor.x;
+    offset.y = mouseY - anchor.y;
+}
+
 let movetime = 0;
 let currentpos = {x: 0, y: 0};
 let movement = {x: 0, y: 0};
@@ -84,6 +95,7 @@ function draw() {
 
     //zoom
     translate(windowWidth/2,windowHeight/2);
+    translate(offset.x,offset.y);
     scale(zoom.value());
 
     image(bg,-bg.width/2,-bg.height/2);
