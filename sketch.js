@@ -19,7 +19,7 @@ function setup() {
     wWidth = windowWidth;
     wHeight = windowHeight;
 
-    zoom = createSlider(Math.max(wWidth/bg.width, wHeight/bg.height),Math.max(wWidth/bg.width, wHeight/bg.height)*10,0,0);
+    zoom = createSlider(Math.max(wWidth/bg.width, wHeight/bg.height)*1.25,Math.max(wWidth/bg.width, wHeight/bg.height)*5,Math.max(wWidth/bg.width, wHeight/bg.height)*1.5,0);
     zoom.id('zoom-slider');
     zoom.style('transform','rotate(270deg)');
     zoom.style('width','30vh');
@@ -132,7 +132,7 @@ function draw() {
     }else{
         if(movetime<=0){
             movetime = randomNum(0,150);
-            outfittime = randomNum(0,movetime);
+            outfittime = randomNum(-50,movetime) + 50;
             movement = genMoveVector();
             // console.log(movement);
             // console.log(newpos);
@@ -140,7 +140,7 @@ function draw() {
         }else{
             if(outfittime<=0){
                 miku = mikus[Math.floor(randomNum(0,9))];
-                outfittime = randomNum(60,150);
+                outfittime = movetime + 150;
             }else{
                 outfittime -= 1;
             }
