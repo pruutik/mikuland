@@ -2,6 +2,8 @@ let bg, miku;
 let wWidth, wHeight;
 let zoom;
 let dragtoggle = true;
+let score = 0;
+let scoreText;
 
 function preload(){
     bg = loadImage("mikus/area_1.png");
@@ -35,6 +37,9 @@ function setup() {
             offset.y = windowHeight/2 - bg.height/2 * zoom.value();
         }
     });
+
+    scoreText = createSpan('Score: #');
+    scoreText.position(10,10);
 
     document.getElementById('zoom-slider').addEventListener('mouseover',() => {dragtoggle = false});
     document.getElementById('zoom-slider').addEventListener('mouseout',() => {dragtoggle = true});
@@ -83,6 +88,8 @@ function mouseDragged() {
     // console.log(offset.x);
     // console.log(bg.width/2*zoom.value());
     // console.log(windowWidth/2+offset.x);
+
+    // console.log(windowHeight/2)
 }
 
 let movetime = 0;
@@ -112,6 +119,11 @@ function draw() {
         // console.log(currentpos);
         currentpos.x += movement.x;
         currentpos.y += movement.y;
+
+        // offset.x = -currentpos.x * zoom.value();
+        // offset.y = -currentpos.y * zoom.value();
+
+        // offset.y = -currentpos.y * zoom.value() - windowHeight/2;
     }else{
         if(movetime<=0){
             movetime = randomNum(0,100)
@@ -122,6 +134,16 @@ function draw() {
         }else{
             movetime -= 1;
         }
+    }
+
+    if(offset.x > -currentpos.x * zoom.value() - windowWidth/2 &&
+        offset.y > -currentpos.y * zoom.value() - windowHeight/2 &&
+        offset.x < -currentpos.x * zoom.value() + windowWidth/2 &&
+        offset.y < -currentpos.y * zoom.value() + windowHeight/2){
+        
+        score += 0.005 * zoom.value() * zoom.value();
+        scoreText.html("Score: " + score.toFixed(2));
+        // console.log(score);
     }
 
     //zoom
