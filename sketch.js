@@ -1,6 +1,7 @@
 let bg, miku;
 let wWidth, wHeight;
 let zoom;
+let dragtoggle = true;
 
 function preload(){
     bg = loadImage("mikus/area_1.png");
@@ -11,13 +12,32 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     wWidth = windowWidth;
     wHeight = windowHeight;
+
     zoom = createSlider(Math.max(wWidth/bg.width, wHeight/bg.height),Math.max(wWidth/bg.width, wHeight/bg.height)*10,0,0);
-    // zoom.position(0,windowHeight/2);
+    zoom.id('zoom-slider');
     zoom.style('transform','rotate(270deg)');
     zoom.style('width','30vh');
     zoom.style('right','calc(-15vh + 50px)');
     zoom.style('top','50vh');
     zoom.style('position','fixed');
+    zoom.input(() => {
+        if(windowWidth/2 + offset.x > bg.width/2 * zoom.value()){
+            offset.x = -windowWidth/2 + bg.width/2 * zoom.value();
+        }
+        if(windowWidth/2 - offset.x > bg.width/2 * zoom.value()){
+            offset.x = windowWidth/2 - bg.width/2 * zoom.value();
+        }
+        if(windowHeight/2 + offset.y > bg.height/2 * zoom.value()){
+            offset.y = -windowHeight/2 + bg.height/2 * zoom.value();
+        }
+
+        if(windowHeight/2 - offset.y > bg.height/2 * zoom.value()){
+            offset.y = windowHeight/2 - bg.height/2 * zoom.value();
+        }
+    });
+
+    document.getElementById('zoom-slider').addEventListener('mouseover',() => {dragtoggle = false});
+    document.getElementById('zoom-slider').addEventListener('mouseout',() => {dragtoggle = true});
     // currentpos = {x: bg.width/2-miku.width/2+10, y: 0};
 }
 
@@ -50,8 +70,19 @@ function mousePressed() {
     anchor.y = mouseY - offset.y;
 }
 function mouseDragged() {
-    offset.x = mouseX - anchor.x;
-    offset.y = mouseY - anchor.y;
+    if(windowWidth/2 + (mouseX - anchor.x) < bg.width/2 * zoom.value() &&
+    windowWidth/2 - (mouseX - anchor.x) < bg.width/2 * zoom.value() &&
+    dragtoggle){
+        offset.x = mouseX - anchor.x;
+    }
+    if(windowHeight/2 + (mouseY - anchor.y) < bg.height/2 * zoom.value() &&
+    windowHeight/2 - (mouseY - anchor.y) < bg.height/2 * zoom.value() &&
+    dragtoggle){
+        offset.y = mouseY - anchor.y;
+    }
+    // console.log(offset.x);
+    // console.log(bg.width/2*zoom.value());
+    // console.log(windowWidth/2+offset.x);
 }
 
 let movetime = 0;
@@ -78,16 +109,16 @@ function draw() {
     noSmooth();
 
     if(abs(currentpos.x - newpos.x) > 30 && abs(currentpos.y - newpos.y) > 30){
-        console.log(currentpos);
+        // console.log(currentpos);
         currentpos.x += movement.x;
         currentpos.y += movement.y;
     }else{
         if(movetime<=0){
             movetime = randomNum(0,100)
             movement = genMoveVector();
-            console.log(movement);
-            console.log(newpos);
-            console.log("Aaaaaa");
+            // console.log(movement);
+            // console.log(newpos);
+            // console.log("Aaaaaa");
         }else{
             movetime -= 1;
         }
