@@ -1,4 +1,5 @@
 let bg, miku;
+let mikus = [];
 let wWidth, wHeight;
 let zoom;
 let dragtoggle = true;
@@ -7,7 +8,10 @@ let scoreText;
 
 function preload(){
     bg = loadImage("mikus/area_1.png");
-    miku = loadImage("mikus/miku.png")
+    for (let i = 1; i <= 10; i++) {
+        mikus.push(loadImage("mikus/miku" + i + ".png"));
+    }
+    miku = mikus[1];
 }
 
 function setup() {
@@ -93,6 +97,7 @@ function mouseDragged() {
 }
 
 let movetime = 0;
+let outfittime = 0;
 let currentpos = {x: 0, y: 0};
 let movement = {x: 0, y: 0};
 let newpos = {x: 0, y: 0};
@@ -126,12 +131,19 @@ function draw() {
         // offset.y = -currentpos.y * zoom.value() - windowHeight/2;
     }else{
         if(movetime<=0){
-            movetime = randomNum(0,100)
+            movetime = randomNum(0,150);
+            outfittime = randomNum(0,movetime);
             movement = genMoveVector();
             // console.log(movement);
             // console.log(newpos);
             // console.log("Aaaaaa");
         }else{
+            if(outfittime<=0){
+                miku = mikus[Math.floor(randomNum(0,9))];
+                outfittime = randomNum(60,150);
+            }else{
+                outfittime -= 1;
+            }
             movetime -= 1;
         }
     }
