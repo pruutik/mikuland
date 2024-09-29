@@ -39,7 +39,7 @@ function setup() {
     });
 
     scoreText = createSpan('Score: #');
-    scoreText.position(10,10);
+    scoreText.position(20,20);
 
     document.getElementById('zoom-slider').addEventListener('mouseover',() => {dragtoggle = false});
     document.getElementById('zoom-slider').addEventListener('mouseout',() => {dragtoggle = true});
@@ -142,7 +142,7 @@ function draw() {
         offset.y < -currentpos.y * zoom.value() + windowHeight/2){
         
         score += 0.005 * zoom.value() * zoom.value();
-        scoreText.html("Score: " + score.toFixed(2));
+        scoreText.html("Score: " + score.toFixed(0));
         // console.log(score);
     }
 
