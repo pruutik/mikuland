@@ -5,6 +5,8 @@ let zoom;
 let dragtoggle = true;
 let score = 0;
 let scoreText;
+let gameover = 60;
+let bgm;
 
 function preload(){
     bg = loadImage("mikus/area_1.png");
@@ -12,6 +14,8 @@ function preload(){
         mikus.push(loadImage("mikus/miku" + i + ".png"));
     }
     miku = mikus[1];
+    viewfinder = loadImage("mikus/viewfinder.png");
+    bgm = loadSound('bgm.mp3');
 }
 
 function setup() {
@@ -48,6 +52,13 @@ function setup() {
     document.getElementById('zoom-slider').addEventListener('mouseover',() => {dragtoggle = false});
     document.getElementById('zoom-slider').addEventListener('mouseout',() => {dragtoggle = true});
     // currentpos = {x: bg.width/2-miku.width/2+10, y: 0};
+
+    setInterval(() => {
+        gameover -= 1;
+        scoreText.html("Score: " + score.toFixed(0) + "<br>Time left: " + gameover);
+    }, 1000);
+
+    bgm.play();
 }
 
 function windowResized() {
@@ -119,6 +130,18 @@ function genMoveVector() {
 
 function draw() {
     noSmooth();
+    tint(255, 255);
+    
+    if(gameover < 0){
+        stroke(255);
+        strokeWeight(10);
+        fill(0,210,33);
+        rect(windowWidth/2 - 200, windowHeight/2 - 110, 370, 150, 10);
+        scoreText.position(windowWidth/2 - 120,windowHeight/2 - 75);
+        scoreText.style('text-align','center')
+        scoreText.html("Game Over! <br> Score: " + score.toFixed(0))
+        return;
+    }
 
     if(abs(currentpos.x - newpos.x) > 30 && abs(currentpos.y - newpos.y) > 30){
         // console.log(currentpos);
@@ -154,7 +177,7 @@ function draw() {
         offset.y < -currentpos.y * zoom.value() + windowHeight/2){
         
         score += 0.005 * zoom.value() * zoom.value();
-        scoreText.html("Score: " + score.toFixed(0));
+        scoreText.html("Score: " + score.toFixed(0) + "<br>Time left: " + gameover);
         // console.log(score);
     }
 
@@ -169,4 +192,7 @@ function draw() {
 
     //statics
     scale(1/zoom.value());
+    translate(-offset.x,-offset.y);
+    tint(255, 90);
+    image(viewfinder, -windowWidth/2, -windowHeight/2, windowWidth, windowHeight);
 }
